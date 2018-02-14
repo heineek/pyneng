@@ -19,3 +19,10 @@
 '''
 
 IP = '192.168.3.1'
+IP_list = [int(octet) for octet in IP.split('.')]
+output = """
+{0:<8}   {1:<8}   {2:<8}   {3:<8}
+{0:08b}   {1:08b}   {2:08b}   {3:08b}
+""".format(IP_list[0], IP_list[1], IP_list[2], IP_list[3])
+
+print(output)

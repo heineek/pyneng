@@ -14,3 +14,7 @@
 
 command1 = 'switchport trunk allowed vlan 1,3,10,20,30,100'
 command2 = 'switchport trunk allowed vlan 1,3,100,200,300'
+vlans1 = [int(vlan) for vlan in command1.split()[-1].split(',')]
+vlans2 = [int(vlan) for vlan in command2.split()[-1].split(',')]
+common_vlans = list(set(vlans1) & set(vlans2))
+print(common_vlans)
