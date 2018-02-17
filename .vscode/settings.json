@@ -1,4 +1,4 @@
 {
-    "python.pythonPath": "H:\\python\\venv\\pyneng\\Scripts\\python.exe",
+    "python.pythonPath": "~/python/venv/pyneng/bin/python3",
     "python.linting.enabled": false
 }
