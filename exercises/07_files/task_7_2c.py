@@ -16,4 +16,17 @@
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 '''
 
+from sys import argv
+
 ignore = ['duplex', 'alias', 'Current configuration']
+
+in_file, out_file = argv[1:]
+
+with open(in_file, 'r') as rf:
+    with open(out_file, 'w') as wf:
+        for line in rf:
+            for word in ignore:
+                if word in line:
+                    break
+            else:
+                wf.write(line)
