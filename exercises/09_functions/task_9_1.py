@@ -56,6 +56,17 @@ def generate_access_config(access):
         'spanning-tree bpduguard enable'
     ]
 
+    result = []
+
+    for interface, vlan in access.items():
+        result.append("interface {}".format(interface))
+        for line in access_template:
+            if line.endswith("access vlan"):
+                result.append(line + " " + str(vlan))
+            else:
+                result.append(line)
+
+    return result
 
 access_dict = {
     'FastEthernet0/12': 10,
@@ -63,3 +74,5 @@ access_dict = {
     'FastEthernet0/16': 17,
     'FastEthernet0/17': 150
 }
+
+print(generate_access_config(access_dict))
