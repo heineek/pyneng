@@ -27,3 +27,11 @@ R6           Fa 0/2          143           R S I           2811       Fa 0/0
 
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 '''
+def parse_cdp_neighbors(output):
+    result = {}
+    output_list = output.split('\n')
+    local_device = output_list[0].split('>')[0]
+    for line in output_list[3:]:
+        fields = line.split()
+        remote_device = fields[0]
+        

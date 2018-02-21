@@ -30,3 +30,4 @@ with open('ospf.txt', 'r') as f:
         """.format(proto=ospf_route_info[0], prfx=ospf_route_info[1], metric = ospf_route_info[2],\
                    nh=ospf_route_info[4], last_upd=ospf_route_info[5], out_intf=ospf_route_info[6])
         print(output)
+
