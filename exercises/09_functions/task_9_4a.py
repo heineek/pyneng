@@ -38,7 +38,7 @@
 ignore = ['duplex', 'alias', 'Current configuration']
 
 
-def check_ignore(command, ignore):
+def check_ignore(command, ignore=ignore):
     '''
     Функция проверяет содержится ли в команде слово из списка ignore.
 
@@ -49,3 +49,23 @@ def check_ignore(command, ignore):
 
     '''
     return any(word in command for word in ignore)
+
+def config_to_dict(config):
+    result = {}
+    with open(config, 'r') as f:
+        for line in f:
+            if not line.strip() or line.startswith('!') or check_ignore(line):
+                continue
+            if not line.startswith(' '):
+                curr_key = line.strip()
+                result[curr_key] = []
+            elif line.startswith(' ') and not line.startswith('  '):
+                second_level_key = line
+                result[curr_key].append(line.strip())
+            else:
+                if result[curr_key]:
+                    result[curr_key] = {result[curr_key][0]: line}
+                
+    return(result)
+
+print(config_to_dict('config_r1.txt'))
