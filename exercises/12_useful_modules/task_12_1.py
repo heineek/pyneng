@@ -14,3 +14,20 @@
 
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 '''
+import subprocess
+
+def check_ip_addresses(addresses):
+    accessible = []
+    inaccessible = []
+    for address in addresses:
+        result = subprocess.run(['ping', '-n', '3', address])
+        if result.returncode:
+            inaccessible.append(address)
+        else:
+            accessible.append(address)
+    return accessible, inaccessible
+        
+
+addresses = ["172.20.5.133", "172.20.5.134", "8.8.8.8", "10.1.1.1", "localhost"]
+
+print(check_ip_addresses(addresses))
