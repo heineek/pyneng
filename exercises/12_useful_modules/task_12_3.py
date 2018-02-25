@@ -24,4 +24,11 @@ Reachable    Unreachable
 from tabulate import tabulate
 
 def ip_table(accessible, inaccessible):
+    data = {'Reachable': accessible, 'Unreachable': inaccessible}
+    print(tabulate(data, headers='keys'))
     
+
+
+reachable = ['10.1.1.1', '10.1.1.2']
+unreachable = ['10.1.1.7', '10.1.1.8', '10.1.1.9']
+ip_table(reachable, unreachable)
