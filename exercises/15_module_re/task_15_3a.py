@@ -20,3 +20,21 @@
 диапазоны адресов и так далее, так как обрабатывается вывод команды, а не ввод пользователя.
 
 '''
+import re
+from pprint import pprint
+
+def parse_cfg(config):
+    result = {}
+    re_intf = r'interface (\S+)'
+    re_add_mask = r'ip address ((?:\d+\.){3}\d+) ((?:\d+\.){3}\d+)'
+    with open(config, 'r') as f:
+        for line in f:
+            match_intf = re.search(re_intf, line)
+            if match_intf:
+                result[match_intf.group(1)] = None
+            match_add_mask = re.search(re_add_mask, line)
+            if match_add_mask:
+                result[match_intf.group(1)] = match_add_mask.groups()
+    return result
+
+pprint(parse_cfg('config_r1.txt'))

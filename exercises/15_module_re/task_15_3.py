@@ -22,3 +22,16 @@
 диапазоны адресов и так далее, так как обрабатывается вывод команды, а не ввод пользователя.
 
 '''
+import re
+
+def parse_cfg(config):
+    result = []
+    regexp = r'ip address ((?:\d+\.){3}\d+) ((?:\d+\.){3}\d+)'
+    with open(config, 'r') as f:
+        for line in f:
+            match = re.search(regexp, line)
+            if match:
+                result.append(match.groups())
+    return result
+
+print(parse_cfg('config_r1.txt'))

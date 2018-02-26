@@ -21,6 +21,7 @@
 
 '''
 import re
+from pprint import pprint
 
 def return_match(file, regexp):
     result = []
@@ -31,5 +32,5 @@ def return_match(file, regexp):
                 result.append(match.group())
     return result
 
-regexp = r'(\d{1,3}\.){3}\d{1,3}'
-print(return_match('sh_ip_int_br.txt', regexp))
+regexp = r'(\d+\.){3}\d+'
+pprint(return_match('sh_ip_int_br.txt', regexp))

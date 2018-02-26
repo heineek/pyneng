@@ -47,4 +47,3 @@ with open(file, 'r') as f:
         match = re.search(regexp, line)
         if match:
             print(line.strip())
-
