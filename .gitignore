@@ -31,5 +31,5 @@ Thumbs.db
 *.pyc
 *.swp
 pyneng.code-workspace
-.vscode/settings.json
+.vscode/
 .env

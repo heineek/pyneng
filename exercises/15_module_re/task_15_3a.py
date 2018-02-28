@@ -24,17 +24,20 @@ import re
 from pprint import pprint
 
 def parse_cfg(config):
-    result = {}
-    re_intf = r'interface (\S+)'
-    re_add_mask = r'ip address ((?:\d+\.){3}\d+) ((?:\d+\.){3}\d+)'
+    interfaces = {}
+    regexp = ('!\ninterface (?P<intf>\S+)'
+              '| ip address (?P<ip>(?:\d+\.){3}\d+) (?P<mask>(?:\d+\.){3}\d+)')
     with open(config, 'r') as f:
-        for line in f:
-            match_intf = re.search(re_intf, line)
-            if match_intf:
-                result[match_intf.group(1)] = None
-            match_add_mask = re.search(re_add_mask, line)
-            if match_add_mask:
-                result[match_intf.group(1)] = match_add_mask.groups()
+        output = f.read()
+
+    matches = re.finditer(regexp, output)
+    for match in matches:
+        if match.lastgroup == 'intf':
+            interface = match.group(match.lastgroup)
+            interfaces[interface] = None
+        elif interface:
+            interfaces[interface] = match.group('ip', 'mask')
+    result = {key: interfaces[key] for key in interfaces if interfaces[key]}
     return result
 
 pprint(parse_cfg('config_r1.txt'))
