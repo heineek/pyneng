@@ -25,7 +25,7 @@ import re
 from pprint import pprint
 
 def parse_sh_ip_int_br(output):
-    regexp = '(?P<intf>\S+) +(?P<ip>\S+) +YES|NO +(?P<status>up|down|administratively down) +(?P<proto>up|down).*'
+    regexp = '(?P<intf>\S+) +(?P<ip>\S+) +\w+ +\w+ (?P<status>\w+) +(?P<proto>\w+)'
     with open(output, 'r') as f:
         matches = re.finditer(regexp, f.read(), re.DOTALL)
         for match in matches:
