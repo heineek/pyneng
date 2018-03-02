@@ -44,8 +44,37 @@
 '''
 
 import glob
+import re
+import csv
 
 sh_version_files = glob.glob('sh_vers*')
-#print(sh_version_files)
+# print(sh_version_files)
+
+def parse_sh_version(output):
+    re_ios = re.compile('Version (?P<ios>\S+),')
+    re_image = re.compile('System image file is \"(?P<image>\S+)\"')
+    re_uptime = re.compile('router uptime is (?P<uptime>.*)')
+
+    ios = re_ios.search(output).group('ios')
+    image = re_image.search(output).group('image')
+    uptime = re_uptime.search(output).group('uptime')
+
+    return(ios, image, uptime)
+
+def write_to_csv(csvfile, data):
+    with open(csvfile, 'w') as f:
+        writer = csv.writer(f, quoting=csv.QUOTE_NONNUMERIC)
+        for row in data:
+            writer.writerow(row)
 
 headers = ['hostname', 'ios', 'image', 'uptime']
+
+data = [headers]
+
+for file in sh_version_files:
+    hostname = re.search('version_(\w+)\.txt', file).group(1)
+    with open(file, 'r') as f:
+        ios, image, uptime = parse_sh_version(f.read())
+        data.append([hostname, ios, image, uptime])
+
+write_to_csv('task_17_1_output.csv', data)
