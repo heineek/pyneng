@@ -29,3 +29,25 @@
 
 Не копировать код функции parse_sh_cdp_neighbors
 '''
+from task_17_2 import parse_sh_cdp_neighbors
+from pprint import pprint
+import yaml
+
+def generate_topology_from_cdp(list_of_files, save_to_file=True, topology_filename='topology.yaml'):
+    topology = {}
+
+    for file in list_of_files:
+        with open(file, 'r') as f:
+            topology.update(parse_sh_cdp_neighbors(f.read()))
+
+    if save_to_file:
+        with open(topology_filename, 'w') as fw:
+            yaml.dump(topology, fw)
+
+    return topology
+
+files = ['sh_cdp_n_sw1.txt', 'sh_cdp_n_r1.txt', 'sh_cdp_n_r2.txt',
+         'sh_cdp_n_r3.txt', 'sh_cdp_n_r4.txt', 'sh_cdp_n_r5.txt',
+         'sh_cdp_n_r6.txt']
+
+pprint(generate_topology_from_cdp(files, topology_filename='topology2.yaml'))

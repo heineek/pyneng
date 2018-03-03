@@ -29,3 +29,18 @@
 > pip install graphviz
 
 '''
+from draw_network_graph import draw_topology
+import yaml
+from pprint import pprint
+from deduplicate_links import deduplicate_links
+
+with open('topology.yaml', 'r') as f:
+    topology = yaml.load(f)
+
+topology_dict = {}  # ((device, loc_intf): (rem_device, rem_intf))
+for device, neighbors in topology.items():
+    for loc_intf, rem_neighbors in neighbors.items():
+        for rem_device, rem_intf in rem_neighbors.items():
+            topology_dict[(device, loc_intf)] = (rem_device, rem_intf)
+
+draw_topology(deduplicate_links(topology_dict))

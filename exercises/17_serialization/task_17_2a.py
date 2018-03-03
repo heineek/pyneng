@@ -27,6 +27,7 @@
 '''
 from task_17_2 import parse_sh_cdp_neighbors
 from pprint import pprint
+import yaml
 
 files = ['sh_cdp_n_sw1.txt', 'sh_cdp_n_r1.txt', 'sh_cdp_n_r2.txt',
          'sh_cdp_n_r3.txt', 'sh_cdp_n_r4.txt', 'sh_cdp_n_r5.txt',
@@ -37,3 +38,6 @@ for file in files:
     with open(file, 'r') as f:
         topology.update(parse_sh_cdp_neighbors(f.read()))
 pprint(topology)
+
+with open('topology.yaml', 'w') as fw:
+    yaml.dump(topology, fw)    
