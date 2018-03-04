@@ -33,3 +33,6 @@ def create_db():
                 con.executescript(schema)
     else:
         print('Database already exists.')
+
+if __name__ == '__main__':
+    create_db()

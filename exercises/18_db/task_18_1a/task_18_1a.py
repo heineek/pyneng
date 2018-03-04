@@ -9,3 +9,7 @@
 * если файла БД нет, вывести сообщение, что БД нет и её необходимо сначала создать
 
 '''
+from add_data import add_dhcp_snoop_data, add_switch_data
+
+add_switch_data()
+add_dhcp_snoop_data()

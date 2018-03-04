@@ -21,7 +21,48 @@ add_data.py
 '''
 
 import glob
+import yaml
+import re
+import sqlite3
 
-db_filename = 'dhcp_snooping.db'
-dhcp_snoop_files = glob.glob('sw*_dhcp_snooping.txt')
-#print(dhcp_snoop_files)
+def add_switch_data():
+    datafile = 'switches.yml'
+    db_filename = 'dhcp_snooping.db'
+
+    with open(datafile, 'r') as f:
+        swiches = yaml.load(f)
+        switch_data = [(hostname, location) for hostname, location in swiches['switches'].items()]
+    
+    con = sqlite3.connect(db_filename)
+    
+    try:
+        with con:
+            query = 'INSERT INTO switches VALUES (?, ?)'
+            con.executemany(query, switch_data)
+    except sqlite3.IntegrityError as e:
+        print('Error occured: ', e)
+
+
+def add_dhcp_snoop_data():
+    db_filename = 'dhcp_snooping.db'
+    dhcp_snoop_files = glob.glob('sw*_dhcp_snooping.txt')
+
+    dhcp_snoop_data = []        # (mac, ip, vlan, interface, hostname)
+    regexp = re.compile(r'(\S+) +(\S+) +\d+ +\S+ +(\d+) +(\S+)')
+    for file in dhcp_snoop_files:
+        hostname = re.search('(\w+?)_', file).group(1)
+        with open(file, 'r') as f:
+            for line in f:
+                match = regexp.search(line)
+                if match:
+                    mac, ip, vlan, interface = match.groups()
+                    dhcp_snoop_data.append((mac, ip, vlan, interface, hostname))
+                    
+    con = sqlite3.connect(db_filename)
+    
+    try:
+        with con:
+            query = 'INSERT INTO dhcp VALUES (?, ?, ?, ?, ?)'
+            con.executemany(query, dhcp_snoop_data)
+    except sqlite3.IntegrityError as e:
+        print('Error occured: ', e)

@@ -31,3 +31,9 @@
 На данном этапе, оба скрипта вызываются без аргументов.
 
 '''
+from add_data import add_switch_data, add_dhcp_snoop_data
+from create_db import create_db
+
+create_db()
+add_switch_data()
+add_dhcp_snoop_data()
