@@ -74,22 +74,47 @@ import sys
 
 db_filename = 'dhcp_snooping.db'
 
-key, value = sys.argv[1:]
-keys = ['mac', 'ip', 'vlan', 'interface']
-keys.remove(key)
+def get_filtered_data(key, value):
+    keys = ['mac', 'ip', 'vlan', 'interface']
+    keys.remove(key)
 
-conn = sqlite3.connect(db_filename)
+    conn = sqlite3.connect(db_filename)
 
-#Позволяет далее обращаться к данным в колонках, по имени колонки
-conn.row_factory = sqlite3.Row
+    #Позволяет далее обращаться к данным в колонках, по имени колонки
+    conn.row_factory = sqlite3.Row
 
-print('\nDetailed information for host(s) with', key, value)
-print('-' * 40)
-
-query = 'select * from dhcp where {} = ?'.format(key)
-result = conn.execute(query, (value, ))
-
-for row in result:
-    for k in keys:
-        print('{:12}: {}'.format(k, row[k]))
+    print('\nDetailed information for host(s) with', key, value)
     print('-' * 40)
+
+    query = 'select * from dhcp where {} = ?'.format(key)
+    result = conn.execute(query, (value, ))
+
+    for row in result:
+        for k in keys:
+            print('{:12}: {}'.format(k, row[k]))
+        print('-' * 40)
+
+
+def get_all_data():
+    conn = sqlite3.connect(db_filename)
+
+    #Позволяет далее обращаться к данным в колонках, по имени колонки
+    conn.row_factory = sqlite3.Row
+
+    print('В таблице dhcp такие записи:')
+    print('-' * 40)
+
+    query = 'SELECT * FROM dhcp'
+    result = conn.execute(query)
+
+    for row in result:
+        print(row)
+
+
+if len(sys.argv) == 1:
+    get_all_data()
+elif len(sys.argv) == 3:
+    key, value = sys.argv[1:]
+    get_filtered_data(key, value)
+else:
+    print('Введите ноль или два аргумента.')
