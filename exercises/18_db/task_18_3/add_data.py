@@ -54,9 +54,24 @@ def add_dhcp_snoop_data():
 
         try:
             with con:
-                query = 'INSERT INTO dhcp VALUES (?, ?, ?, ?, ?, ?)'
+                select_all_query = 'SELECT * FROM dhcp'
+                cursor = con.cursor()
+                result = cursor.execute(select_all_query)
+                all_dhcp_snoop_macs = [entry[0] for entry in result]
+
                 for entry in dhcp_snoop_data:
-                    con.execute(query, (*entry, 0))
+                    if entry[0] in all_dhcp_snoop_macs:
+                        update_query = 'UPDATE dhcp SET active=1 WHERE mac="{}"'.format(entry[0])
+                        con.execute(update_query)
+                        all_dhcp_snoop_macs.remove(entry[0])
+                    else:
+                        insert_query = 'INSERT INTO dhcp VALUES (?, ?, ?, ?, ?, ?)'
+                        con.execute(insert_query, (*entry, 0))
+                    
+                    for mac in all_dhcp_snoop_macs:
+                        update_query = 'UPDATE dhcp SET active=0 WHERE mac="{}"'.format(mac)
+                        con.execute(update_query)
+
         except sqlite3.IntegrityError as e:
             print('Error occured: ', e)
     else:
