@@ -15,15 +15,12 @@ import re
 import sqlite3
 import os
 
-def db_exist(db_filename):
-    return os.path.exists(db_filename)
-
+datafile = 'switches.yml'
+db_filename = 'dhcp_snooping.db'
+dhcp_snoop_files = glob.glob('sw*_dhcp_snooping.txt')
 
 def add_switch_data():
-    datafile = 'switches.yml'
-    db_filename = 'dhcp_snooping.db'
-
-    if db_exist(db_filename):
+    if os.path.exists(db_filename):
         with open(datafile, 'r') as f:
             swiches = yaml.load(f)
             switch_data = [(hostname, location) for hostname, location in swiches['switches'].items()]
@@ -41,11 +38,8 @@ def add_switch_data():
 
 
 def add_dhcp_snoop_data():
-    db_filename = 'dhcp_snooping.db'
-    dhcp_snoop_files = glob.glob('sw*_dhcp_snooping.txt')
-
-    if db_exist(db_filename):
-        dhcp_snoop_data = []        # (mac, ip, vlan, interface, hostname, active)
+    if os.path.exists(db_filename):
+        dhcp_snoop_data = []        # (mac, ip, vlan, interface, hostname)
         regexp = re.compile(r'(\S+) +(\S+) +\d+ +\S+ +(\d+) +(\S+)')
         for file in dhcp_snoop_files:
             hostname = re.search('(\w+?)_', file).group(1)
@@ -54,25 +48,28 @@ def add_dhcp_snoop_data():
                     match = regexp.search(line)
                     if match:
                         mac, ip, vlan, interface = match.groups()
-                        dhcp_snoop_data.append((mac, ip, vlan, interface, hostname, 0))
+                        dhcp_snoop_data.append((mac, ip, vlan, interface, hostname))
 
         con = sqlite3.connect(db_filename)
 
         try:
             with con:
+                query = 'INSERT INTO dhcp VALUES (?, ?, ?, ?, ?, ?)'
                 for entry in dhcp_snoop_data:
-                    select_query = 'SELECT * FROM dhcp WHERE mac={}'.format(entry[0])
-                    query_result = con.execute(select_query)
-                    if query_result:
-                        update_query = 'UPDATE dhcp SET active=1 WHERE mac='
-                    else:
-                        insert_query = 'INSERT INTO dhcp VALUES (?, ?, ?, ?, ?, ?)'
+                    con.execute(query, (*entry, 0))
         except sqlite3.IntegrityError as e:
             print('Error occured: ', e)
     else:
         print('Database file no found, create it first.')
 
 
-if __name__ == '__main__':
-    add_switch_data()
-    add_dhcp_snoop_data()
+def get_dhcp_snoop_data():
+    con = sqlite3.connect(db_filename)
+    cursor = con.cursor()
+    result = cursor.execute('SELECT * FROM dhcp')
+    for row in result:
+        print(row)
+
+
+add_dhcp_snoop_data()
+get_dhcp_snoop_data()
