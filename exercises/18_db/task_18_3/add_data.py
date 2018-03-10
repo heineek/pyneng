@@ -75,7 +75,16 @@ def add_dhcp_snoop_data():
         except sqlite3.IntegrityError as e:
             print('Error occured: ', e)
     else:
-        print('Database file no found, create it first.')
+        print('Database file not found, create it first.')
+
+
+def get_snmp_snooping_data():
+    con = sqlite3.connect(db_filename)
+    select_query = 'SELECT * FROM dhcp'
+    with con:
+        query_result = con.execute(select_query)
+    for row in query_result:
+        print(row)
 
 
 def get_dhcp_snoop_data():
