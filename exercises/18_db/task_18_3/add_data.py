@@ -19,12 +19,8 @@ datafile = 'switches.yml'
 db_filename = 'dhcp_snooping.db'
 dhcp_snoop_files = glob.glob('sw*_dhcp_snooping.txt')
 
-def db_exist(db_filename):
-    return os.path.exists(db_filename)
-
-
 def add_switch_data():
-    if db_exist(db_filename):
+    if os.path.exists(db_filename):
         with open(datafile, 'r') as f:
             swiches = yaml.load(f)
             switch_data = [(hostname, location) for hostname, location in swiches['switches'].items()]
@@ -42,8 +38,8 @@ def add_switch_data():
 
 
 def add_dhcp_snoop_data():
-    if db_exist(db_filename):
-        dhcp_snoop_data = []        # (mac, ip, vlan, interface, hostname, active)
+    if os.path.exists(db_filename):
+        dhcp_snoop_data = []        # (mac, ip, vlan, interface, hostname)
         regexp = re.compile(r'(\S+) +(\S+) +\d+ +\S+ +(\d+) +(\S+)')
         for file in dhcp_snoop_files:
             hostname = re.search('(\w+?)_', file).group(1)
@@ -58,15 +54,23 @@ def add_dhcp_snoop_data():
 
         try:
             with con:
+                select_all_query = 'SELECT * FROM dhcp'
+                cursor = con.cursor()
+                result = cursor.execute(select_all_query)
+                all_dhcp_snoop_macs = [entry[0] for entry in result]
+
                 for entry in dhcp_snoop_data:
-                    select_query = 'SELECT * FROM dhcp'
-                    query_result = con.execute(select_query)
-                    if ((*entry, 0)) in query_result or ((*entry, 1)) in query_result:
+                    if entry[0] in all_dhcp_snoop_macs:
                         update_query = 'UPDATE dhcp SET active=1 WHERE mac="{}"'.format(entry[0])
                         con.execute(update_query)
+                        all_dhcp_snoop_macs.remove(entry[0])
                     else:
                         insert_query = 'INSERT INTO dhcp VALUES (?, ?, ?, ?, ?, ?)'
                         con.execute(insert_query, (*entry, 0))
+                    
+                    for mac in all_dhcp_snoop_macs:
+                        update_query = 'UPDATE dhcp SET active=0 WHERE mac="{}"'.format(mac)
+                        con.execute(update_query)
 
         except sqlite3.IntegrityError as e:
             print('Error occured: ', e)
@@ -83,7 +87,13 @@ def get_snmp_snooping_data():
         print(row)
 
 
-if __name__ == '__main__':
-    # add_switch_data()
-    add_dhcp_snoop_data()
-    get_snmp_snooping_data()
+def get_dhcp_snoop_data():
+    con = sqlite3.connect(db_filename)
+    cursor = con.cursor()
+    result = cursor.execute('SELECT * FROM dhcp')
+    for row in result:
+        print(row)
+
+
+add_dhcp_snoop_data()
+get_dhcp_snoop_data()
