@@ -14,6 +14,7 @@ import yaml
 import re
 import sqlite3
 import os
+import datetime
 
 datafile = 'switches.yml'
 db_filename = 'dhcp_snooping.db'
@@ -59,19 +60,29 @@ def add_dhcp_snoop_data():
                 result = cursor.execute(select_all_query)
                 all_dhcp_snoop_macs = [entry[0] for entry in result]
 
+                now = str(datetime.datetime.today().replace(microsecond=0))
+                week_ago = str(datetime.datetime.today().replace(microsecond=0) - datetime.timedelta(days=7))
+
                 for entry in dhcp_snoop_data:
                     if entry[0] in all_dhcp_snoop_macs:
-                        update_query = 'UPDATE dhcp SET active=1 WHERE mac="{}"'.format(entry[0])
+                        update_query = 'UPDATE dhcp SET active=1, last_active="{}" WHERE mac="{}"'.format(now, entry[0])
                         con.execute(update_query)
                         all_dhcp_snoop_macs.remove(entry[0])
                     else:
-                        insert_query = 'INSERT INTO dhcp VALUES (?, ?, ?, ?, ?, ?)'
-                        con.execute(insert_query, (*entry, 0))
+                        insert_query = 'INSERT INTO dhcp VALUES (?, ?, ?, ?, ?, ?, ?)'
+                        con.execute(insert_query, (*entry, 0, now))
                     
                     for mac in all_dhcp_snoop_macs:
                         update_query = 'UPDATE dhcp SET active=0 WHERE mac="{}"'.format(mac)
                         con.execute(update_query)
 
+                expired_query = 'SELECT * from dhcp WHERE last_active<"{}"'.format(week_ago)
+                cursor = con.cursor()
+                expired_entries = cursor.execute(expired_query)
+                for entry in expired_entries:
+                    delete_query = 'DELETE FROM dhcp WHERE mac="{}"'.format(entry[0])
+                    con.execute(delete_query)
+                    
         except sqlite3.IntegrityError as e:
             print('Error occured: ', e)
     else:
