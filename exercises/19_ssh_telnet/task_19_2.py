@@ -28,10 +28,11 @@ def send_config_commands(device_params, commands):
 
     return result
 
-commands = ['logging 10.255.255.1', 'logging buffered 20010', 'no logging console']
-
-with open('devices.yaml', 'r') as f:
-        devices = yaml.load(f.read())
-
-for device in devices['routers']:
-    pprint(send_config_commands(device, commands))
+if __name__ == '__main__':
+    commands = ['logging 10.255.255.1', 'logging buffered 20010', 'no logging console']
+    
+    with open('devices.yaml', 'r') as f:
+            devices = yaml.load(f.read())
+    
+    for device in devices['routers']:
+        pprint(send_config_commands(device, commands))

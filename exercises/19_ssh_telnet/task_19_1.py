@@ -27,10 +27,11 @@ def send_show_command(device_params, command):
 
     return result
 
-command = 'sh ip int br'
-
-with open('devices.yaml', 'r') as f:
-        devices = yaml.load(f.read())
-
-for device in devices['routers']:
-    pprint(send_show_command(device, command))
+if __name__ == '__main__':
+    command = 'sh ip int br'
+    
+    with open('devices.yaml', 'r') as f:
+            devices = yaml.load(f.read())
+    
+    for device in devices['routers']:
+        pprint(send_show_command(device, command))

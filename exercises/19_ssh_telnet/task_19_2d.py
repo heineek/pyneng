@@ -31,7 +31,26 @@
 
 В файле задания заготовлены команды с ошибками и без:
 '''
+import netmiko, yaml
+from pprint import pprint
+from task_19_2c import send_config_commands
+
+def send_cfg_to_devices(devices_list, config_commands):
+    result_correct = {}
+    result_incorrect = {}
+    for device in devices_list:
+        ip = device['ip']
+        result_correct[ip], result_incorrect[ip] = \
+            send_config_commands(device, commands, verbose=False)
+    return result_correct, result_incorrect
+
+
 commands_with_errors = ['logging 0255.255.1', 'logging', 'i']
 correct_commands = ['logging buffered 20010', 'ip http server']
 
 commands = commands_with_errors + correct_commands
+
+with open('devices.yaml', 'r') as f:
+    devices = yaml.load(f.read())
+
+pprint(send_cfg_to_devices(devices['routers'], commands))

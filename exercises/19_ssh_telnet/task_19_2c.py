@@ -33,29 +33,33 @@ def send_config_commands(device_params, commands, verbose=True):
     with netmiko.ConnectHandler(**device_params) as ssh:
         ssh.enable()
         ssh.config_mode()
-        result_incorrect[device_params['ip']] = ''
-        result_correct[device_params['ip']] = ''
+        result_incorrect = {}
+        result_correct = {}
         for command in commands:
             result = ssh.send_command(command)
             if result.startswith('% ') or '^' in result:
-                result_incorrect[device_params['ip']] += command + '\n' + result
+                answer = input("Continue? [y]/n: ")
+                if answer.lower() == 'n':
+                    break
+                result_incorrect[command] = result
                 output = 'Error with command "{}" on device {}: {}'.format(
-                    command, device_params['ip'], result[2:])
+                    command, device_params['ip'], result)
                 print(output)
             else:
-                result_correct[device_params['ip']] += command + '\n' + result
+                result_correct[command] = result
                 if verbose:
-                    pprint(result_correct[device_params['ip']])
+                    pprint(result)
 
     return result_correct, result_incorrect
 
-commands_with_errors = ['logging 0255.255.1', 'logging', 'i']
-correct_commands = ['logging buffered 20010', 'ip http server']
+if __name__ == '__main__':
+    commands_with_errors = ['logging 0255.255.1', 'logging', 'i']
+    correct_commands = ['logging buffered 20010', 'ip http server']
 
-commands = commands_with_errors + correct_commands
+    commands = commands_with_errors + correct_commands
 
-with open('devices.yaml', 'r') as f:
-        devices = yaml.load(f.read())
+    with open('devices.yaml', 'r') as f:
+            devices = yaml.load(f.read())
 
-for device in devices['routers']:
-    pprint(send_config_commands(device, commands, verbose=False))
+    for device in devices['routers']:
+        pprint(send_config_commands(device, commands))
