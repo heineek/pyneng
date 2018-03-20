@@ -23,10 +23,8 @@
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 '''
 
-access_template = [
-    'switchport mode access', 'switchport access vlan',
-    'spanning-tree portfast', 'spanning-tree bpduguard enable'
-]
+access_template = ['switchport mode access', 'switchport access vlan',
+                   'spanning-tree portfast', 'spanning-tree bpduguard enable']
 
 trunk_template = [
     'switchport trunk encapsulation dot1q', 'switchport mode trunk',
@@ -62,7 +60,7 @@ for intf, vlans in fast_int['trunk'].items():
             if vlans[0] == 'add':
                 print(' {} add {}'.format(command, ','.join(vlans[1:])))
             elif vlans[0] == 'del':
-                print (' {} remove {}'.format(command, ','.join(vlans[1:])))
+                print(' {} remove {}'.format(command, ','.join(vlans[1:])))
             else:
                 print(' {} {}'.format(command, ','.join(vlans[1:])))
         else:

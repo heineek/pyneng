@@ -34,4 +34,3 @@ else:
     result = 'unused'
 
 print(result)
-

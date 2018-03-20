@@ -28,6 +28,7 @@ R6           Fa 0/2          143           R S I           2811       Fa 0/0
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 '''
 
+
 def parse_cdp_neighbors(output):
     result = {}
     output_list = output.split('\n')

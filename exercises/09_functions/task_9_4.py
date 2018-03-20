@@ -37,6 +37,7 @@ def ignore_command(command, ignore=ignore):
     '''
     return any(word in command for word in ignore)
 
+
 def config_to_dict(config):
     result = {}
     with open(config, 'r') as f:
@@ -48,7 +49,7 @@ def config_to_dict(config):
                 result[curr_key] = []
             else:
                 result[curr_key].append(line.strip())
-                
+
     return(result)
 
 print(config_to_dict('config_sw1.txt'))

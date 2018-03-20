@@ -23,6 +23,8 @@
 
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 '''
+
+
 def get_int_vlan_map(config):
     int_configs = {}
     with open(config, 'r') as f:
@@ -34,7 +36,7 @@ def get_int_vlan_map(config):
                 int_configs[curr_intf].append(line.strip())
             else:
                 continue
-    
+
     access_ports = {}
     trunk_ports = {}
 
@@ -53,7 +55,7 @@ def get_int_vlan_map(config):
                     vlans = [int(vlan) for vlan in line.split()[-1].split(',')]
                     break
             trunk_ports[intf] = vlans
-    
+
     return access_ports, trunk_ports
 
 print(get_int_vlan_map('config_sw2.txt'))

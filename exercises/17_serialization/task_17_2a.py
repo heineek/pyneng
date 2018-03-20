@@ -40,4 +40,4 @@ for file in files:
 pprint(topology)
 
 with open('topology.yaml', 'w') as fw:
-    yaml.dump(topology, fw)    
+    yaml.dump(topology, fw)

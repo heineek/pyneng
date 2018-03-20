@@ -20,6 +20,7 @@ datafile = 'switches.yml'
 db_filename = 'dhcp_snooping.db'
 dhcp_snoop_files = glob.glob('sw*_dhcp_snooping.txt')
 
+
 def add_switch_data():
     if os.path.exists(db_filename):
         with open(datafile, 'r') as f:
@@ -70,7 +71,7 @@ def add_dhcp_snoop_data():
                     else:
                         insert_query = 'INSERT INTO dhcp VALUES (?, ?, ?, ?, ?, ?, ?)'
                         con.execute(insert_query, (*entry, 0, now))
-                    
+
                     for mac in all_dhcp_snoop_macs:
                         update_query = 'UPDATE dhcp SET active=0 WHERE mac="{}"'.format(mac)
                         con.execute(update_query)

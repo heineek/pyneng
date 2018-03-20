@@ -9,8 +9,10 @@
 
 По умолчанию, результат должен выводиться.
 '''
-import netmiko, yaml
+import netmiko
+import yaml
 from pprint import pprint
+
 
 def send_config_commands(device_params, commands, verbose=True):
     result = {}
@@ -22,7 +24,8 @@ def send_config_commands(device_params, commands, verbose=True):
 
     return result
 
-commands = ['logging 10.255.255.1', 'logging buffered 20010', 'no logging console']
+commands = ['logging 10.255.255.1', 'logging buffered 20010',
+            'no logging console']
 
 with open('devices.yaml', 'r') as f:
         devices = yaml.load(f.read())

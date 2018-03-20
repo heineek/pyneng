@@ -25,16 +25,18 @@ import yaml
 import re
 import sqlite3
 
+
 def add_switch_data():
     datafile = 'switches.yml'
     db_filename = 'dhcp_snooping.db'
 
     with open(datafile, 'r') as f:
         swiches = yaml.load(f)
-        switch_data = [(hostname, location) for hostname, location in swiches['switches'].items()]
-    
+        switch_data = [(hostname, location) for hostname, location in
+                       swiches['switches'].items()]
+
     con = sqlite3.connect(db_filename)
-    
+
     try:
         with con:
             query = 'INSERT INTO switches VALUES (?, ?)'
@@ -57,9 +59,9 @@ def add_dhcp_snoop_data():
                 if match:
                     mac, ip, vlan, interface = match.groups()
                     dhcp_snoop_data.append((mac, ip, vlan, interface, hostname))
-                    
+
     con = sqlite3.connect(db_filename)
-    
+
     try:
         with con:
             query = 'INSERT INTO dhcp VALUES (?, ?, ?, ?, ?)'

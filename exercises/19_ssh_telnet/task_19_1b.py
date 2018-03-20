@@ -11,8 +11,10 @@
 
 Для проверки измените IP-адрес на устройстве или в файле devices.yaml.
 '''
-import netmiko, yaml
+import netmiko
+import yaml
 from pprint import pprint
+
 
 def send_show_command(device_params, command):
     result = {}

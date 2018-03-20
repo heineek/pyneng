@@ -20,11 +20,13 @@ datafile = 'switches.yml'
 db_filename = 'dhcp_snooping.db'
 dhcp_snoop_files = glob.glob('sw*_dhcp_snooping.txt')
 
+
 def add_switch_data():
     if os.path.exists(db_filename):
         with open(datafile, 'r') as f:
             swiches = yaml.load(f)
-            switch_data = [(hostname, location) for hostname, location in swiches['switches'].items()]
+            switch_data = [(hostname, location) for hostname, location in
+                           swiches['switches'].items()]
 
         con = sqlite3.connect(db_filename)
 
@@ -49,7 +51,8 @@ def add_dhcp_snoop_data():
                     match = regexp.search(line)
                     if match:
                         mac, ip, vlan, interface = match.groups()
-                        dhcp_snoop_data.append((mac, ip, vlan, interface, hostname))
+                        dhcp_snoop_data.append((mac, ip, vlan, interface,
+                                                hostname))
 
         con = sqlite3.connect(db_filename)
 
@@ -71,7 +74,7 @@ def add_dhcp_snoop_data():
                     else:
                         insert_query = 'INSERT INTO dhcp VALUES (?, ?, ?, ?, ?, ?, ?)'
                         con.execute(insert_query, (*entry, 0, now))
-                    
+
                     for mac in all_dhcp_snoop_macs:
                         update_query = 'UPDATE dhcp SET active=0 WHERE mac="{}"'.format(mac)
                         con.execute(update_query)
@@ -82,7 +85,7 @@ def add_dhcp_snoop_data():
                 for entry in expired_entries:
                     delete_query = 'DELETE FROM dhcp WHERE mac="{}"'.format(entry[0])
                     con.execute(delete_query)
-                    
+
         except sqlite3.IntegrityError as e:
             print('Error occured: ', e)
     else:

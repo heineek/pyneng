@@ -23,13 +23,15 @@
 Проверить функцию на командах с ошибкой.
 
 '''
-import netmiko, yaml
+import netmiko
+import yaml
 from pprint import pprint
+
 
 def send_config_commands(device_params, commands, verbose=True):
     result_correct = {}
     result_incorrect = {}
-    
+
     with netmiko.ConnectHandler(**device_params) as ssh:
         ssh.enable()
         ssh.config_mode()

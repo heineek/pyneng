@@ -50,6 +50,7 @@ import csv
 sh_version_files = glob.glob('sh_vers*')
 # print(sh_version_files)
 
+
 def parse_sh_version(output):
     re_ios = re.compile('Version (?P<ios>\S+),')
     re_image = re.compile('System image file is \"(?P<image>\S+)\"')
@@ -60,6 +61,7 @@ def parse_sh_version(output):
     uptime = re_uptime.search(output).group('uptime')
 
     return(ios, image, uptime)
+
 
 def write_to_csv(csvfile, data):
     with open(csvfile, 'w') as f:

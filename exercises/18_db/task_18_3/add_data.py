@@ -19,11 +19,13 @@ datafile = 'switches.yml'
 db_filename = 'dhcp_snooping.db'
 dhcp_snoop_files = glob.glob('sw*_dhcp_snooping.txt')
 
+
 def add_switch_data():
     if os.path.exists(db_filename):
         with open(datafile, 'r') as f:
             swiches = yaml.load(f)
-            switch_data = [(hostname, location) for hostname, location in swiches['switches'].items()]
+            switch_data = [(hostname, location) for hostname, location in
+                           swiches['switches'].items()]
 
         con = sqlite3.connect(db_filename)
 
@@ -48,7 +50,8 @@ def add_dhcp_snoop_data():
                     match = regexp.search(line)
                     if match:
                         mac, ip, vlan, interface = match.groups()
-                        dhcp_snoop_data.append((mac, ip, vlan, interface, hostname))
+                        dhcp_snoop_data.append((mac, ip, vlan, interface,
+                                                hostname))
 
         con = sqlite3.connect(db_filename)
 

@@ -50,6 +50,7 @@ def check_ignore(command, ignore=ignore):
     '''
     return any(word in command for word in ignore)
 
+
 def config_to_dict(config):
     result = {}
     with open(config, 'r') as f:
@@ -65,7 +66,7 @@ def config_to_dict(config):
             else:
                 if result[curr_key]:
                     result[curr_key] = {result[curr_key][0]: line}
-                
+
     return(result)
 
 print(config_to_dict('config_r1.txt'))

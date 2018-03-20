@@ -35,9 +35,11 @@
 from task_11_1 import parse_cdp_neighbors
 from draw_network_graph import draw_topology
 
+
 def deduplicate_links(topology):
     '''
-    if (X, Y): (N, M) and (N, M): (X, Y) are in the same dict, remove one of them
+    if (X, Y): (N, M) and (N, M): (X, Y) are in the same dict, remove one of
+    them
     '''
     result = topology.copy()
 
@@ -50,7 +52,8 @@ def deduplicate_links(topology):
             del(result[value])
     return result
 
-files = ['sh_cdp_n_sw1.txt', 'sh_cdp_n_r1.txt', 'sh_cdp_n_r2.txt', 'sh_cdp_n_r3.txt']
+files = ['sh_cdp_n_sw1.txt', 'sh_cdp_n_r1.txt', 'sh_cdp_n_r2.txt',
+         'sh_cdp_n_r3.txt']
 
 topology = {}
 for file in files:

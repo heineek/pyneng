@@ -4,6 +4,7 @@ import yaml
 import datetime
 import re
 
+
 def create_db(name, schema):
     if not os.path.exists(name):
         con = sqlite3.connect(name)
@@ -12,6 +13,7 @@ def create_db(name, schema):
                 con.executescript(f.read())
     else:
         print('Database already exists.')
+
 
 def add_data_switches(db_file, filename):
     if os.path.exists(db_file):
@@ -30,7 +32,8 @@ def add_data_switches(db_file, filename):
             print('Error occured: ', e)
     else:
         print('Database file no found, create it first.')
-    
+
+
 def add_data(db_file, filename):
     if os.path.exists(db_file):
         dhcp_snoop_data = []        # (mac, ip, vlan, interface, hostname)
@@ -63,7 +66,7 @@ def add_data(db_file, filename):
                     else:
                         insert_query = 'INSERT INTO dhcp VALUES (?, ?, ?, ?, ?, ?, ?)'
                         con.execute(insert_query, (*entry, 0, now))
-                    
+
                     for mac in all_dhcp_snoop_macs:
                         update_query = 'UPDATE dhcp SET active=0 WHERE mac="{}"'.format(mac)
                         con.execute(update_query)
@@ -72,6 +75,7 @@ def add_data(db_file, filename):
             print('Error occured: ', e)
     else:
         print('Database file not found, create it first.')
+
 
 def get_data(db_file, key, value):
     keys = ['mac', 'ip', 'vlan', 'interface', 'switch']
@@ -82,7 +86,7 @@ def get_data(db_file, key, value):
 
     conn = sqlite3.connect(db_file)
 
-    #Позволяет далее обращаться к данным в колонках, по имени колонки
+    # Позволяет далее обращаться к данным в колонках, по имени колонки
     conn.row_factory = sqlite3.Row
 
     print('\nDetailed information for host(s) with', key, value)
@@ -105,7 +109,8 @@ def get_data(db_file, key, value):
             for k in keys:
                 print('{:12}: {}'.format(k, row[k]))
             print('-' * 40)
-    
+
+
 def get_all_data(db_file):
     conn = sqlite3.connect(db_file)
     query_for_active = 'SELECT * FROM dhcp WHERE active=1'
@@ -115,7 +120,7 @@ def get_all_data(db_file):
     print('-' * 85)
     print('Active values:')
     print('-' * 85)
-    
+
     for row in cursor.execute(query_for_active):
         print('{}  {:15}     {:4}   {:16}     {}         {}'.format(*row))
     print('-' * 85)

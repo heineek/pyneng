@@ -24,6 +24,7 @@
 import re
 from pprint import pprint
 
+
 def parse_sh_ip_int_br(output):
     regexp = '(?P<intf>\S+) +(?P<ip>\S+) +\S+ +\S+ +(?P<status>administratively down|up|down) +(?P<proto>up|down)'
     result = []

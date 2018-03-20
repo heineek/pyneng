@@ -74,13 +74,14 @@ import sys
 
 db_filename = 'dhcp_snooping.db'
 
+
 def get_filtered_data(key, value):
     keys = ['mac', 'ip', 'vlan', 'interface', 'switch']
     keys.remove(key)
 
     conn = sqlite3.connect(db_filename)
 
-    #Позволяет далее обращаться к данным в колонках, по имени колонки
+    # Позволяет далее обращаться к данным в колонках, по имени колонки
     conn.row_factory = sqlite3.Row
 
     print('\nDetailed information for host(s) with', key, value)
@@ -102,7 +103,7 @@ def get_all_data():
 
     print('В таблице dhcp такие записи:')
     print('-' * 70)
-    
+
     for row in cursor.execute(query):
         print('{}  {:15}     {:4}   {:16}     {}'.format(*row))
 

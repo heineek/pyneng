@@ -18,9 +18,11 @@
 Функция send_commands_to_devices должна использовать функцию send_commands из задания 19.3.
 
 '''
-import yaml, getpass
+import yaml
+import getpass
 from pprint import pprint
 from task_19_3 import send_commands
+
 
 def send_commands_to_devices(devices_list, show='', filename='', config=None):
     user = input('Username: ')
@@ -35,7 +37,7 @@ def send_commands_to_devices(devices_list, show='', filename='', config=None):
         dev['secret'] = enable
 
         result.append(send_commands(dev, show, filename, config))
-    
+
     return result
 
 

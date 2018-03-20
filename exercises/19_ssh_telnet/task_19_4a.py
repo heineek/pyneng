@@ -15,10 +15,12 @@
 и затем использовать ее в функции send_commands_to_devices.
 
 '''
-import yaml, getpass
+import yaml
+import getpass
 from pprint import pprint
 from task_19_3 import send_commands
 from task_19_3b import is_accessible
+
 
 def send_commands_to_devices(devices_list, show='', filename='', config=None):
     user = input('Username: ')
@@ -36,7 +38,7 @@ def send_commands_to_devices(devices_list, show='', filename='', config=None):
             result.append(send_commands(dev, show, filename, config))
         else:
             print('Device with ip address {} is not accessible'.format(device['ip']))
-    
+
     return result
 
 

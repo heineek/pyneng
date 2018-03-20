@@ -16,7 +16,8 @@
 и затем использовать ее в функции send_commands.
 '''
 import subprocess
-import netmiko, yaml
+import netmiko
+import yaml
 from pprint import pprint
 from task_19_1 import send_show_command
 from task_19_2 import send_config_commands
@@ -51,11 +52,11 @@ if __name__ == '__main__':
         'logging 10.255.255.1', 'logging buffered 20010', 'no logging console'
     ]
     command = 'sh ip int br'
-    
+
     with open('devices.yaml', 'r') as f:
         devices = yaml.load(f.read())
         device_list = devices['routers']
-    
+
     for device in device_list:
         if is_accessible(device['ip']):
             print('show\n')

@@ -33,7 +33,9 @@ from task_17_2 import parse_sh_cdp_neighbors
 from pprint import pprint
 import yaml
 
-def generate_topology_from_cdp(list_of_files, save_to_file=True, topology_filename='topology.yaml'):
+
+def generate_topology_from_cdp(list_of_files, save_to_file=True,
+                               topology_filename='topology.yaml'):
     topology = {}
 
     for file in list_of_files:

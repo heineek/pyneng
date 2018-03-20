@@ -24,6 +24,7 @@
 '''
 import re
 
+
 def parse_cfg(config):
     result = []
     regexp = r'ip address ((?:\d+\.){3}\d+) ((?:\d+\.){3}\d+)'

@@ -23,4 +23,3 @@ for line in lines:
     if fields[0] == vlan:
         cleared_line = " {}    {}   {}".format(fields[0], fields[1], fields[3])
         print(cleared_line)
-    

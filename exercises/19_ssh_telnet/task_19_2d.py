@@ -31,9 +31,11 @@
 
 В файле задания заготовлены команды с ошибками и без:
 '''
-import netmiko, yaml
+import netmiko
+import yaml
 from pprint import pprint
 from task_19_2c import send_config_commands
+
 
 def send_cfg_to_devices(devices_list, config_commands):
     result_correct = {}

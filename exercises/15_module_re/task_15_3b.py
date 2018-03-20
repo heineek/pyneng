@@ -27,6 +27,7 @@ Ethernet0/1 соответствует список из двух кортеже
 import re
 from pprint import pprint
 
+
 def parse_cfg(config):
     interfaces = {}
     regexp = ('!\ninterface (?P<intf>\S+)'

@@ -20,6 +20,7 @@ create_db.py
 import os
 import sqlite3
 
+
 def create_db():
     db_filename = 'dhcp_snooping.db'
     schema_filename = 'dhcp_snooping_schema.sql'
