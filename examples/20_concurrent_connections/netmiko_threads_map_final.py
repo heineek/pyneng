@@ -13,7 +13,7 @@ received_msg = '<=== {} Received result from device: {}'
 
 def connect_ssh(device_dict, command):
     print(start_msg.format(datetime.now().time(), device_dict['ip']))
-    if device_dict['ip'] == '192.168.100.1':
+    if device_dict['ip'] == '192.168.56.1':
         time.sleep(10)
     with ConnectHandler(**device_dict) as ssh:
         ssh.enable()
