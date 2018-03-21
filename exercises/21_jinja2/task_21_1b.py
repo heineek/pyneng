@@ -22,6 +22,36 @@
 * словаре data_dict
 
 '''
+from jinja2 import Environment, FileSystemLoader
+import yaml
+import json
+import os
+
+
+def generate_cfg_from_template(template_path, trim_blocks=True,
+                               lstrip_blocks=True, yaml_file='', json_file='',
+                               py_dict=''):
+    template_dir, template_file = os.path.split(template_path)
+
+    env = Environment(
+        loader=FileSystemLoader(template_dir),
+        trim_blocks=trim_blocks,
+        lstrip_blocks=lstrip_blocks)
+    template = env.get_template(template_file)
+    
+    if yaml_file:
+        vars_dict = yaml.load(open(yaml_file))
+    elif json_file:
+        vars_dict = json.load(open(json_file))
+    elif py_dict:
+        vars_dict = data_dict
+    else:
+        print('No data file specified!')
+        return 
+    
+    return template.render(vars_dict)
+
+template_path = 'templates\\for.txt'
 
 data_dict = {
     'vlans': {
@@ -42,3 +72,9 @@ data_dict = {
     'id': 3,
     'name': 'R3'
 }
+
+print(generate_cfg_from_template(template_path, yaml_file='data_files\\for.yml'))
+print('\n\n')
+print(generate_cfg_from_template(template_path, json_file='data_files\\for.json'))
+print('\n\n')
+print(generate_cfg_from_template(template_path, py_dict=data_dict))

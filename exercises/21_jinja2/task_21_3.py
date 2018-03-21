@@ -35,3 +35,7 @@
 
 
 '''
+from task_21_1c import generate_cfg_from_template
+
+print(generate_cfg_from_template('templates\\ospf.txt',
+                                 'data_files\\ospf.yml'))

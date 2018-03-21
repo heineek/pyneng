@@ -30,3 +30,7 @@ interface Gi0/10
 Не копируйте код функции.
 
 '''
+from task_21_1c import generate_cfg_from_template
+
+print(generate_cfg_from_template('templates\\add_vlan_to_switch.txt',
+                                 'data_files\\add_vlan_to_switch.yaml'))
