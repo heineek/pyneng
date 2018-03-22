@@ -31,3 +31,26 @@
 
 Проверить работу функции send_and_parse_command на команде sh ip int br.
 '''
+from task_19_1 import send_show_command
+from task_22_4 import parse_command_dynamic
+from pprint import pprint
+import yaml
+
+
+def send_and_parse_command(device_params, attributes, index='index',
+                           templates='templates'):
+    ip = device_params['ip']
+    output = send_show_command(device_params, attributes['Command'])
+    parse_result = parse_command_dynamic(attributes, output[ip])
+
+    return {ip: parse_result}
+
+if __name__ == '__main__':
+    with open('devices.yaml') as f:
+        devices = yaml.load(f.read())
+
+    command = 'sh ip int br'
+    attributes = {'Command': command, 'Vendor': 'cisco_ios'}
+
+    for device in devices:
+        pprint(send_and_parse_command(device, attributes))

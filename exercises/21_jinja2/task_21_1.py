@@ -32,9 +32,9 @@ def generate_cfg_from_template(template_path, vars):
         trim_blocks=True,
         lstrip_blocks=True)
     template = env.get_template(template_file)
-    
+
     vars_dict = yaml.load(open(vars))
-    
+
     return template.render(vars_dict)
 
 print(generate_cfg_from_template(template_path, vars))

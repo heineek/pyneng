@@ -44,7 +44,7 @@ def send_config_commands(device_params, commands):
         ssh.enable()
         result[device_params['ip']] = ssh.send_config_set(commands)
 
-    return result    
+    return result
 
 
 def send_show_command(device_params, command):
@@ -84,7 +84,7 @@ def send_commands_to_devices(devices_list, show='', filename='', config=None):
         dev['password'] = password
         dev['secret'] = enable
         result.append(send_commands(dev, show, filename, config))
-          
+
     return result
 
 
@@ -100,7 +100,8 @@ filename = 'config.txt'
 
 
 accessibility = threads_ping(is_accessible, devices_list)
-accessible_devices = [device for device in devices_list if accessibility[device['ip']]]
+accessible_devices = [device for device in devices_list if
+                      accessibility[device['ip']]]
 
 pprint(send_commands_to_devices(accessible_devices, show=command))
 pprint(send_commands_to_devices(accessible_devices, filename=filename))

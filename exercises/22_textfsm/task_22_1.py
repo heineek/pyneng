@@ -19,14 +19,20 @@
 
 import sys
 import textfsm
-from tabulate import tabulate
+from pprint import pprint
 
-template = sys.argv[1]
-output_file = sys.argv[2]
 
-with open(template) as f, open(output_file) as output:
-    re_table = textfsm.TextFSM(f)
-    header = re_table.header
-    result = re_table.ParseText(output.read())
-    print(result)
-    print(tabulate(result, headers=header))
+def parse_output(template, output):
+    with open(template) as f, open(output) as output:
+        re_table = textfsm.TextFSM(f)
+        header = re_table.header
+        parse_result = re_table.ParseText(output.read())
+        result = [header]
+        result.extend(parse_result)
+    return result
+
+if __name__ == '__main__':
+    template = sys.argv[1]
+    output_file = sys.argv[2]
+
+    pprint(parse_output(template, output_file))

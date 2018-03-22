@@ -43,7 +43,7 @@ def generate_cfg_from_template(template_path, data, trim_blocks=True,
     if type(data) is str:
         data_file = os.path.split(data)[-1]
         data_type = data_file.split('.')[-1].lower()
-    
+
         if data_type in ['yml', 'yaml']:
             vars_dict = yaml.load(open(data))
         elif data_type == 'json':
@@ -56,12 +56,12 @@ def generate_cfg_from_template(template_path, data, trim_blocks=True,
     else:
         print(error_message)
         return None
-    
+
     return template.render(vars_dict)
 
 if __name__ == '__main__':
     template_path = 'templates\\for.txt'
-    
+
     data_dict = {
         'vlans': {
             10: 'Marketing',
@@ -81,8 +81,7 @@ if __name__ == '__main__':
         'id': 3,
         'name': 'R3'
     }
-    
-    
+
     print(generate_cfg_from_template(template_path, 'data_files\\for.yml'))
     print('\n\n')
     print(generate_cfg_from_template(template_path, 'data_files\\for.json'))

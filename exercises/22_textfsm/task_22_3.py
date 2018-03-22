@@ -13,3 +13,10 @@
 
 Проверить работу шаблона с помощью функции из задания 22.1.
 '''
+from task_22_1 import parse_output
+from pprint import pprint
+
+output = 'output\\sh_ip_dhcp_snooping.txt'
+template = 'templates\\sh_ip_dhcp_snooping.template'
+
+pprint(parse_output(template, output))

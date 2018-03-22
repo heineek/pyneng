@@ -7,7 +7,8 @@
 Функция generate_cfg_from_template должна принимать любые аргументы,
 которые принимает класс Environment и просто передавать их ему.
 
-То есть, надо добавить возможность контролировать аргументы trim_blocks, lstrip_blocks
+То есть, надо добавить возможность контролировать аргументы trim_blocks,
+lstrip_blocks
 и любые другие аргументы Environment через функцию generate_cfg_from_template.
 
 Проверить функциональность на аргументах:
@@ -34,9 +35,9 @@ def generate_cfg_from_template(template_path, vars, trim_blocks=True,
         trim_blocks=trim_blocks,
         lstrip_blocks=lstrip_blocks)
     template = env.get_template(template_file)
-    
+
     vars_dict = yaml.load(open(vars))
-    
+
     return template.render(vars_dict)
 
 print(generate_cfg_from_template(template_path, vars, trim_blocks=False,
