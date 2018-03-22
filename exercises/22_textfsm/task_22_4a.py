@@ -30,4 +30,4 @@ def parse_command_dynamic(attributes, output, index='index',
 output_sh_ip_int_br = open('output/sh_ip_int_br.txt').read()
 attributes = {'Command': 'sh ip int br', 'Vendor': 'cisco_ios'}
 
-pprint(parse_command_dynamic(attributes, output_sh_ip_int_br))
+pprint(parse_command_dynamic(attributes, output_sh_ip_int_br, show_output=True))
